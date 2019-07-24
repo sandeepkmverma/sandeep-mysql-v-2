@@ -1,0 +1,32 @@
+---
+- name: Download the version of zlib that we want to update to
+  get_url:
+    url: https://zlib.net/zlib-1.2.11.tar.gz
+    dest: /opt
+
+- name: Unpack the source
+  unarchive:
+    src: /opt/zlib-1.2.11.tar.gz
+    dest: /opt/
+    remote_src: yes
+      
+- name: Installing gcc
+  package:
+    name: gcc
+    state: present
+
+- name: Executing the script
+  command: "./configure --shared --prefix=/usr"
+  args:
+    chdir: /opt/zlib-1.2.11/
+
+- name: Build the default target
+  make:
+    chdir: /opt/zlib-1.2.11/
+
+- name: Run 'install' target
+  command: "make install"
+  args:
+    chdir: /opt/zlib-1.2.11/
+
+
